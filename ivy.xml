@@ -16,7 +16,27 @@
     	<!-- ProM packages. -->
     	<dependency org="prom" name="BasicUtils" rev="latest" changing="true" transitive="true" />
     	<dependency org="prom" name="Widgets" rev="latest" changing="true" transitive="true" />
-    	<!-- Third party libraries. These may span multiple lines. -->
+
+		<dependency org="prom" name="PetriNets" rev="latest" changing="true" transitive="true" />
+		<dependency org="prom" name="Log" rev="latest" changing="true" transitive="true" />
+		<!-- Workflownet analysis -->
+		<dependency org="prom" name="Woflan" rev="latest" changing="true" transitive="true" />
+
+		<!-- TODO: remove all unneeded dependencies -->
+		<!-- Christians Petrinetmodifier -->
+		<dependency org="prom" name="ProjectionMiner" rev="latest" changing="true" transitive="true" />
+		<dependency org="prom" name="GraphViz" rev="latest" changing="true" transitive="true" />
+		<dependency org="prom" name="GraphVisualizers" rev="latest" changing="true" transitive="true" />
+		<dependency org="prom" name="ApacheUtils" rev="latest" changing="true" transitive="true" />
+
+		<dependency org="prom" name="JAXB" rev="latest" changing="true" transitive="true" />
+
+		<dependency org="prom" name="ETConformance" rev="latest" changing="true" transitive="true" />
+		<dependency org="prom" name="StochasticAwareConformanceChecking" rev="latest" changing="true" transitive="true" />
+
+
+
+		<!-- Third party libraries. These may span multiple lines. -->
     	<!-- Please uncomment the second line in the resolve target in your build.xml file
     	     if you have any third party libraries. -->
  		<!-- Third party library downloaded from maven repository. -->
