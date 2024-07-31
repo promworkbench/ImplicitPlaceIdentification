@@ -38,26 +38,34 @@ import java.util.stream.Collectors;
  * - the cut of IPs across subnets is also implicit in the full net
  */
 public class DecomposeAndConquerImplicitPlaceFinder {
-    // TODO add findmode
     
     private final Petrinet petrinet;
     private final XLog log;
     private final Marking initialMarking;
 
-    public DecomposeAndConquerImplicitPlaceFinder(Petrinet petrinet, Marking initialMarking, XLog log) {
+    public enum FindMode {
+        GREEDY,
+        FIND_ALL_POTENTIAL_IPS
+    }
+
+    private final FindMode findMode;
+
+    public DecomposeAndConquerImplicitPlaceFinder(Petrinet petrinet, Marking initialMarking, XLog log, FindMode findMode) {
         //check if net is a sound WFN, if not, throw illegal argument exception
         checkOnSoundWFNness(petrinet);
         this.petrinet = petrinet;
         this.initialMarking = initialMarking;
         this.log = log;
+        this.findMode = findMode;
     }
 
-    public DecomposeAndConquerImplicitPlaceFinder(Petrinet petrinet, Marking initialMarking) {
+    public DecomposeAndConquerImplicitPlaceFinder(Petrinet petrinet, Marking initialMarking, FindMode findMode) {
         //check if net is a sound WFN, if not, throw illegal argument exception
         checkOnSoundWFNness(petrinet);
         this.petrinet = petrinet;
         this.initialMarking = initialMarking;
         this.log = null;
+        this.findMode = findMode;
     }
 
     /**
@@ -158,17 +166,25 @@ public class DecomposeAndConquerImplicitPlaceFinder {
             // TODO optimal version (find combination to remove the max number of places)
             // TODO option to return all individually identifiable IPs
 
-            // the following variable is used when finding a combination of IP candidates that can be safely removed
-            Set<Place> placesThatCannotBeRemoved = new HashSet<>();
+            switch(this.findMode){
+                case GREEDY:
+                    // the following variable is used when finding a combination of IP candidates that can be safely removed
+                    Set<Place> placesThatCannotBeRemoved = new HashSet<>();
 
-            Set<Place> potentiallyImplicitPlaces = new HashSet<>(implicitPlaceCandidates.keySet());
-            for (Place ipCandidate : potentiallyImplicitPlaces) {
-                if (!placesThatCannotBeRemoved.contains(ipCandidate)) {
-                    placesThatCannotBeRemoved.addAll(implicitPlaceCandidates.get(ipCandidate));
-                    implicitPlaceCandidates.remove(ipCandidate);
-                }
+                    Set<Place> potentiallyImplicitPlaces = new HashSet<>(implicitPlaceCandidates.keySet());
+                    for (Place ipCandidate : potentiallyImplicitPlaces) {
+                        if (!placesThatCannotBeRemoved.contains(ipCandidate)) {
+                            placesThatCannotBeRemoved.addAll(implicitPlaceCandidates.get(ipCandidate));
+                            implicitPlaceCandidates.remove(ipCandidate);
+                        }
+                    }
+                    identifiedIPs.addAll(implicitPlaceCandidates.keySet());
+                    break;
+                case FIND_ALL_POTENTIAL_IPS:
+                default:
+                    identifiedIPs.addAll(implicitPlaceCandidates.keySet());
+                    break;
             }
-            identifiedIPs.addAll(implicitPlaceCandidates.keySet());
         }
         return identifiedIPs;
     }
