@@ -33,11 +33,6 @@ public class StructureBasedImplicitPlaceFinder {
     private int[][] post;
     private int[][] c;
 
-    public enum FindMode {
-        GREEDY,
-        FIND_ALL_POTENTIAL_IPS
-    }
-
     private FindMode findMode;
 
     public StructureBasedImplicitPlaceFinder(Petrinet petrinet, Marking initialMarking, FindMode findMode) {

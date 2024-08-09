@@ -43,11 +43,6 @@ public class DecomposeAndConquerImplicitPlaceFinder {
     private final XLog log;
     private final Marking initialMarking;
 
-    public enum FindMode {
-        GREEDY,
-        FIND_ALL_POTENTIAL_IPS
-    }
-
     private final FindMode findMode;
 
     public DecomposeAndConquerImplicitPlaceFinder(Petrinet petrinet, Marking initialMarking, XLog log, FindMode findMode) {
@@ -126,7 +121,7 @@ public class DecomposeAndConquerImplicitPlaceFinder {
                     if (log == null) {
                         StructureBasedImplicitPlaceFinder ipFinder = new StructureBasedImplicitPlaceFinder(subnet,
                                 copier.originalToCopyMarking(initialMarking),
-                                StructureBasedImplicitPlaceFinder.FindMode.FIND_ALL_POTENTIAL_IPS);
+                                FindMode.FIND_ALL_POTENTIAL_IPS);
                         implyingPlaces = ipFinder.getPlacesImplyingP(sp);
                     } else {
                         // TODO filter log to only contain transitions that are in net? Not doing so might currently
@@ -161,13 +156,10 @@ public class DecomposeAndConquerImplicitPlaceFinder {
             /* DEBUGGING */
 
             // candidates are already the cut across t-nets, now check for dependencies between candidates
-            // greedy version: go through hash map from start to finish, remove the first place, keep all implying
-            // places
             // TODO optimal version (find combination to remove the max number of places)
-            // TODO option to return all individually identifiable IPs
-
             switch(this.findMode){
                 case GREEDY:
+                    // go through hash map from start to finish, remove the first place, keep all implying places
                     // the following variable is used when finding a combination of IP candidates that can be safely removed
                     Set<Place> placesThatCannotBeRemoved = new HashSet<>();
 
@@ -181,6 +173,7 @@ public class DecomposeAndConquerImplicitPlaceFinder {
                     identifiedIPs.addAll(implicitPlaceCandidates.keySet());
                     break;
                 case FIND_ALL_POTENTIAL_IPS:
+                    // return all places that are identified as implicit on their own
                 default:
                     identifiedIPs.addAll(implicitPlaceCandidates.keySet());
                     break;
@@ -194,7 +187,7 @@ public class DecomposeAndConquerImplicitPlaceFinder {
         Set<Place> resultOnCopy;
         StructureBasedImplicitPlaceFinder ipFinder = new StructureBasedImplicitPlaceFinder(subnet,
                 initialMarkingOnSubnet,
-                StructureBasedImplicitPlaceFinder.FindMode.FIND_ALL_POTENTIAL_IPS);
+                FindMode.FIND_ALL_POTENTIAL_IPS);
         resultOnCopy = ipFinder.find();
         return resultOnCopy;
     }
@@ -254,7 +247,7 @@ public class DecomposeAndConquerImplicitPlaceFinder {
         } else if (!woflanDiagnosis.isSound()) {
             throw new IllegalArgumentException("Petri net is not sound");
         } else if (!WorkflowNetUtils.isValidWFNet(petrinet)) {
-            throw new IllegalArgumentException("Petri net is not a workflow net");
+            //throw new IllegalArgumentException("Petri net is not a workflow net");
         }
     }
 }
