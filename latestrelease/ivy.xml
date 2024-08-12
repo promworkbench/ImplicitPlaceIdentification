@@ -1,7 +1,7 @@
 <ivy-module version="2.0">
     <info organisation="prom" module="ImplicitPlaceIdentification" revision="latest">
     	<description>
-    		Version 6.14.7
+    		Version 6.14.9
     	</description>
     </info>
     <configurations>
