@@ -22,7 +22,7 @@ import org.processmining.plugins.petrinet.finalmarkingprovider.MarkingEditorPane
         userAccessible = true,
         categories = {},
         keywords = {"implicit places", "redundant places", "postprocessing"},
-        help = "")
+        help = "Colors implicit places in the Petri net using ILPs.")
 public class ILPBasedImplicitPlaceColorerPlugin {
 
     @PluginVariant(variantLabel = "IP-Finder: ILP-based, apn", requiredParameterLabels = {2})

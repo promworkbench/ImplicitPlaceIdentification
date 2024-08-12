@@ -19,7 +19,8 @@ import org.processmining.plugins.petrinet.finalmarkingprovider.MarkingEditorPane
         userAccessible = true,
         categories = {},
         keywords = {"implicit places", "redundant places", "postprocessing"},
-        help = "")
+        help = "Colors implicit places using a log replay. It can only replay traces that perfectly fit the log. If " +
+                "too few traces fit the log, it does not return reliable results.")
 public class ReplayBasedImplicitPlaceColorerPlugin {
 
     @PluginVariant(variantLabel = "IP-Finder: Replay-based, apn", requiredParameterLabels = {3, 2})

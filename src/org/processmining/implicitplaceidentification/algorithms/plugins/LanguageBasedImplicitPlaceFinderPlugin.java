@@ -18,7 +18,8 @@ import org.processmining.plugins.petrinet.finalmarkingprovider.MarkingEditorPane
         userAccessible = true,
         categories = {},
         keywords = {"implicit places", "redundant places", "postprocessing"},
-        help = "Colors implicit places in the Petri net by generating an approximation of the language. May have unfeasibly high runtime and memory usage!")
+        help = "Colors implicit places in the Petri net by generating an approximation of the language. May have " +
+                "unfeasibly high runtime and memory usage!")
 
 
 public class LanguageBasedImplicitPlaceFinderPlugin {
