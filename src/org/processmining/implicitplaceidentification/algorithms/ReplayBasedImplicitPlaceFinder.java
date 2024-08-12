@@ -22,6 +22,7 @@ import java.util.stream.IntStream;
  * <p>
  * This finder is not exclusive to inputs mined with the eST-Miner and also supports arc weights > 1
  * TODO places empty in beginning and end of replay?
+ * TODO Findmode for safe removal
  */
 public class ReplayBasedImplicitPlaceFinder {
     private final Petrinet petrinet;
@@ -79,35 +80,18 @@ public class ReplayBasedImplicitPlaceFinder {
         int p1 = placeToRowMap.get(place);
         Set<Place> placesThatMakeP1implicit = new HashSet<>();
 
-        // Optimization: only compare places that share input transitions with p1
-        // 1. get input transitions for p1
-        Set<Transition> transitionsPrecedingP1 =
-                petrinet.getInEdges(place).stream().map(edge -> (Transition) edge.getSource()).collect(Collectors.toSet());
-        // 2. put followplaces of all these transitions in a set -> map them to row values and use below as source
-        // for p2
-        Set<Place> placesThatShareInputTransitionWithP1 = new HashSet<>();
-        transitionsPrecedingP1.forEach(transition -> placesThatShareInputTransitionWithP1.addAll(petrinet.getOutEdges(transition).stream().map(edge -> (Place) edge.getTarget()).collect(Collectors.toSet())));
-
-        for (int p2 :
-                Collections.unmodifiableSet(placesThatShareInputTransitionWithP1.stream().map(placeToRowMap::get).collect(Collectors.toSet()))) {
+        for (int p2 : placeToRowMap.values()) {
             if (p1 == p2) {
                 continue;
             }
-            // check whether marking histories of p1 > p2 or p1 == p2
+            // check whether p1 > p2
             boolean hasPotential = true;
-            boolean isEqual = true;
             for (int[][] markingHistory : markingSequences.values()) {
                 //TODO might change greater or equal to to equal and at least in one point greater to
                 if (!AlgebraClass.arrayIsGreaterOrEqualTo(markingHistory[p1], markingHistory[p2])) {
                     hasPotential = false;
                     break;
                 }
-                if (!Arrays.equals(markingHistory[p1], markingHistory[p2])) {
-                    isEqual = false;
-                }
-            }
-            if (isEqual) {
-                placesThatMakeP1implicit.add(placeToRowMap.inverse().get(p2));
             }
             if (hasPotential) {
                 // compute marking history of p3 and check whether p3 exists
